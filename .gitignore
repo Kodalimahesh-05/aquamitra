@@ -1,0 +1,17 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.env
+venv/
+.venv/
+env/
+
+# Streamlit secrets (NEVER commit actual secrets)
+.streamlit/secrets.toml
+
+# IDE & OS files
+.DS_Store
+.vscode/
+.idea/
