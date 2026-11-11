@@ -68,7 +68,7 @@ def render_environment_view():
                 with cols[i]:
                     st.markdown(
                         f"""
-                        <div class="saas-card" style="padding: 12px; text-align: center;">
+                        <div class="saas-card forecast-card" style="padding: 12px; text-align: center;">
                             <div style="font-weight: 700; color: #0F2942; font-size: 0.88rem;">{f['day'][:3]} ({f['date'][5:]})</div>
                             <div style="font-size: 0.78rem; color: #64748B; margin: 4px 0;">{cond_disp}</div>
                             <div style="font-size: 1.15rem; font-weight: 700; color: #0F172A;">{f['temp_max']}° / <span style="color:#64748B; font-size: 0.90rem;">{f['temp_min']}°</span></div>

@@ -124,7 +124,6 @@ if search_query and search_query.strip():
 
 # 6. Global Quick Actions Bar (All 9 Workflows, Zero Emojis)
 st.caption(t("quick_actions", lang))
-st.markdown('<div class="quick-actions-container">', unsafe_allow_html=True)
 qa1, qa2, qa3, qa4, qa5, qa6, qa7, qa8, qa9 = st.columns(9)
 with qa1:
     if st.button(t("qa_add_pond", lang), use_container_width=True, key="top_qa_add_pond"):
@@ -153,7 +152,6 @@ with qa8:
 with qa9:
     if st.button(t("qa_add_maintenance", lang), use_container_width=True, key="top_qa_add_maint"):
         dialog_add_maintenance()
-st.markdown('</div>', unsafe_allow_html=True)
 
 st.markdown("<div style='border-top: 1px solid #E2E8F0; margin: 12px 0 18px 0;'></div>", unsafe_allow_html=True)
 

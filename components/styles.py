@@ -60,22 +60,53 @@ def apply_custom_styles():
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
         }}
 
-        /* KPI Metric Card */
+        /* KPI Metric Card & Forecast Equal-Height Rows */
+        div[data-testid="stHorizontalBlock"]:has(.metric-card),
+        div[data-testid="stHorizontalBlock"]:has(.forecast-card) {{
+            align-items: stretch !important;
+            margin-bottom: 12px !important;
+        }}
+        div[data-testid="stHorizontalBlock"]:has(.metric-card) > div[data-testid="stColumn"],
+        div[data-testid="stHorizontalBlock"]:has(.metric-card) > div[data-testid="column"],
+        div[data-testid="stHorizontalBlock"]:has(.forecast-card) > div[data-testid="stColumn"],
+        div[data-testid="stHorizontalBlock"]:has(.forecast-card) > div[data-testid="column"] {{
+            display: flex !important;
+            flex-direction: column !important;
+        }}
+        div[data-testid="stHorizontalBlock"]:has(.metric-card) [data-testid="stVerticalBlock"],
+        div[data-testid="stHorizontalBlock"]:has(.metric-card) .stElementContainer,
+        div[data-testid="stHorizontalBlock"]:has(.metric-card) .stMarkdown,
+        div[data-testid="stHorizontalBlock"]:has(.metric-card) [data-testid="stMarkdownContainer"],
+        div[data-testid="stHorizontalBlock"]:has(.forecast-card) [data-testid="stVerticalBlock"],
+        div[data-testid="stHorizontalBlock"]:has(.forecast-card) .stElementContainer,
+        div[data-testid="stHorizontalBlock"]:has(.forecast-card) .stMarkdown,
+        div[data-testid="stHorizontalBlock"]:has(.forecast-card) [data-testid="stMarkdownContainer"] {{
+            height: 100% !important;
+            margin-bottom: 0 !important;
+        }}
         .metric-card {{
             background: {COLORS['bg_surface']};
             border-radius: 8px;
-            padding: 14px 18px;
+            padding: 14px 16px;
             border: 1px solid {COLORS['border']};
             border-top: 3px solid {COLORS['accent']};
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
-            margin-bottom: 12px;
+            margin-bottom: 0;
             height: 100%;
-            min-height: 105px;
+            min-height: 106px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             box-sizing: border-box;
             transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }}
+        .forecast-card {{
+            height: 100%;
+            min-height: 168px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            margin-bottom: 8px !important;
         }}
         .metric-card:hover {{
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.06);
@@ -306,28 +337,67 @@ def apply_custom_styles():
             margin-top: 2px;
         }}
 
-        /* Quick Action Bar Buttons & Layout */
-        .quick-actions-container {{
-            width: 100%;
-            margin-bottom: 8px;
+        /* Quick Action Bar Buttons & Layout (Desktop Grid -> Laptop Grid -> Mobile 3x3 Grid) */
+        div[data-testid="stHorizontalBlock"]:has([class*="st-key-top_qa_"]) {{
+            display: grid !important;
+            grid-template-columns: repeat(9, minmax(0, 1fr)) !important;
+            grid-auto-rows: 1fr !important;
+            gap: 8px !important;
+            align-items: stretch !important;
+            width: 100% !important;
         }}
-        .quick-actions-container div[data-testid="stHorizontalBlock"] .stButton button,
-        div[data-testid="stHorizontalBlock"]:has(> div:nth-child(5)) .stButton button {{
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 0.82rem;
-            letter-spacing: 0.01em;
-            padding: 8px 12px;
-            white-space: nowrap;
+        div[data-testid="stHorizontalBlock"]:has([class*="st-key-top_qa_"]) > div[data-testid="stColumn"],
+        div[data-testid="stHorizontalBlock"]:has([class*="st-key-top_qa_"]) > div[data-testid="column"] {{
+            width: 100% !important;
+            min-width: 0 !important;
+            flex: none !important;
+            display: flex !important;
+            flex-direction: column !important;
+        }}
+        div[data-testid="stHorizontalBlock"]:has([class*="st-key-top_qa_"]) [class*="st-key-top_qa_"],
+        div[data-testid="stHorizontalBlock"]:has([class*="st-key-top_qa_"]) .stButton {{
+            height: 100% !important;
+            width: 100% !important;
+        }}
+        div[data-testid="stHorizontalBlock"]:has([class*="st-key-top_qa_"]) .stButton button {{
+            border-radius: 6px !important;
+            font-weight: 600 !important;
+            font-size: 0.78rem !important;
+            line-height: 1.25 !important;
+            letter-spacing: 0.005em !important;
+            padding: 8px 6px !important;
+            height: 100% !important;
+            min-height: 50px !important;
+            width: 100% !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            text-align: center !important;
+            white-space: normal !important;
+            word-break: keep-all !important;
+            overflow-wrap: break-word !important;
+        }}
+        div[data-testid="stHorizontalBlock"]:has([class*="st-key-top_qa_"]) .stButton button p {{
+            margin: 0 !important;
+            line-height: 1.22 !important;
+            text-align: center !important;
+        }}
+
+        @media (max-width: 1199px) and (min-width: 769px) {{
+            div[data-testid="stHorizontalBlock"]:has([class*="st-key-top_qa_"]) {{
+                grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+                gap: 8px !important;
+            }}
         }}
 
         /* Tables & DataFrames */
         .stDataFrame, div[data-testid="stTable"] {{
             border: 1px solid {COLORS['border']};
-            border-radius: 6px;
+            border-radius: 8px;
             overflow-x: auto !important;
             -webkit-overflow-scrolling: touch !important;
             max-width: 100% !important;
+            background: {COLORS['bg_surface']};
         }}
 
         /* Responsive Streamlit Tabs with Horizontal Swipe */
@@ -359,8 +429,26 @@ def apply_custom_styles():
         }}
 
         /* Charts Container */
+        div[data-testid="stPlotlyChart"] {{
+            background: {COLORS['bg_surface']};
+            border: 1px solid {COLORS['border']};
+            border-radius: 8px;
+            padding: 8px 8px 2px 8px;
+            margin-bottom: 12px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+        }}
         .js-plotly-plot, .plot-container {{
             max-width: 100% !important;
+        }}
+
+        /* Alert Card Action Button Alignment */
+        div[class*="st-key-res_"] button {{
+            white-space: normal !important;
+            text-align: center !important;
+            line-height: 1.25 !important;
+            min-height: 38px !important;
+            font-size: 0.78rem !important;
+            padding: 6px 10px !important;
         }}
 
         /* ===================================================== */
@@ -389,45 +477,44 @@ def apply_custom_styles():
                 font-size: 0.78rem !important;
             }}
 
-            /* Quick Action Chips Carousel on Mobile */
-            .quick-actions-container div[data-testid="stHorizontalBlock"],
-            div[data-testid="stHorizontalBlock"]:has(> div:nth-child(5)) {{
-                display: flex !important;
-                flex-direction: row !important;
-                flex-wrap: nowrap !important;
-                overflow-x: auto !important;
-                -webkit-overflow-scrolling: touch !important;
-                gap: 8px !important;
-                padding-bottom: 8px !important;
-                padding-top: 2px !important;
-                scrollbar-width: thin;
+            /* Quick Action 3x3 Responsive Grid on Mobile (Zero Clipping) */
+            div[data-testid="stHorizontalBlock"]:has([class*="st-key-top_qa_"]) {{
+                display: grid !important;
+                grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+                gap: 6px !important;
+                padding: 2px 0 6px 0 !important;
+                overflow: visible !important;
             }}
-            .quick-actions-container div[data-testid="column"],
-            div[data-testid="stHorizontalBlock"]:has(> div:nth-child(5)) > div[data-testid="column"] {{
-                flex: 0 0 auto !important;
-                width: auto !important;
-                min-width: 125px !important;
+            div[data-testid="stHorizontalBlock"]:has([class*="st-key-top_qa_"]) > div[data-testid="stColumn"],
+            div[data-testid="stHorizontalBlock"]:has([class*="st-key-top_qa_"]) > div[data-testid="column"] {{
+                width: 100% !important;
+                min-width: 0 !important;
+                flex: none !important;
             }}
-            .quick-actions-container button,
-            div[data-testid="stHorizontalBlock"]:has(> div:nth-child(5)) button {{
-                min-height: 42px !important;
-                padding: 8px 14px !important;
+            div[data-testid="stHorizontalBlock"]:has([class*="st-key-top_qa_"]) .stButton button {{
+                min-height: 46px !important;
+                padding: 6px 4px !important;
+                font-size: 0.74rem !important;
             }}
 
             /* Responsive 2-Column KPI Cards Grid on Mobile */
             div[data-testid="stHorizontalBlock"]:has(.metric-card) {{
-                display: flex !important;
-                flex-wrap: wrap !important;
+                display: grid !important;
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
                 gap: 8px !important;
+                margin-bottom: 8px !important;
             }}
+            div[data-testid="stHorizontalBlock"]:has(.metric-card) > div[data-testid="stColumn"],
             div[data-testid="stHorizontalBlock"]:has(.metric-card) > div[data-testid="column"] {{
-                flex: 1 1 calc(50% - 6px) !important;
-                min-width: calc(50% - 6px) !important;
-                max-width: calc(50% - 6px) !important;
+                width: 100% !important;
+                min-width: 0 !important;
+                max-width: 100% !important;
+                flex: none !important;
             }}
             .metric-card {{
                 padding: 10px 12px !important;
-                margin-bottom: 4px !important;
+                margin-bottom: 0 !important;
+                min-height: 94px !important;
             }}
             .metric-title {{
                 font-size: 0.65rem !important;

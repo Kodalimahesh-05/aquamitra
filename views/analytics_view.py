@@ -139,7 +139,7 @@ def render_analytics_view():
                     title=f"{sel_pid} — {_lbl(lang, 'Actual vs Recommended Feed (kg)', 'వేసిన vs సిఫార్సు మేత (కేజీ)')}",
                     labels={"FeedingDate": _lbl(lang, "Date", "తేదీ"), "value": _lbl(lang, "Feed (kg)", "మేత (కేజీ)")}
                 )
-                fig_pf.update_layout(height=300, margin=dict(l=15, r=15, t=35, b=15), legend=dict(orientation="h", y=1.15))
+                fig_pf.update_layout(height=300, margin=dict(l=15, r=15, t=52, b=15), legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
                 st.plotly_chart(fig_pf, use_container_width=True)
             else:
                 st.caption(_lbl(lang, "No feeding records for selected pond.", "ఎంచుకున్న చెరువుకు మేత రికార్డులు లేవు."))

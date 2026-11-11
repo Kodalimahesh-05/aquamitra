@@ -144,8 +144,9 @@ def render_assets_view():
 
     # 2. Maintenance Logs
     with tabs[1]:
-        st.markdown(f"#### {_lbl(lang, 'Infrastructure & Equipment Maintenance History', 'మౌలిక సదుపాయాలు మరియు పరికరాల నిర్వహణ చరిత్ర')}")
-        m_top1, m_top2 = st.columns([3, 1])
+        m_top1, m_top2 = st.columns([3, 1], vertical_alignment="center")
+        with m_top1:
+            st.markdown(f"#### {_lbl(lang, 'Infrastructure & Equipment Maintenance History', 'మౌలిక సదుపాయాలు మరియు పరికరాల నిర్వహణ చరిత్ర')}")
         with m_top2:
             if st.button(_lbl(lang, "Log Maintenance Record", "నిర్వహణ రికార్డు నమోదు"), type="primary", use_container_width=True):
                 dialog_add_maintenance()

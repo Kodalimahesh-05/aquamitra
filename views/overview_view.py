@@ -175,7 +175,7 @@ def render_overview_view():
                         line_color="#D97706",
                         annotation_text=_lbl(lang, "Optimal Threshold (5.0 mg/L)", "ప్రమాణ స్థాయి (5.0 mg/L)")
                     )
-                    fig_w.update_layout(height=260, margin=dict(l=15, r=15, t=35, b=15), legend=dict(orientation="h", y=1.2))
+                    fig_w.update_layout(height=270, margin=dict(l=15, r=15, t=52, b=15), legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
                     st.plotly_chart(fig_w, use_container_width=True)
 
             # Growth Trajectory Preview
@@ -195,7 +195,7 @@ def render_overview_view():
                     },
                     title=_lbl(lang, "Average Fish Weight (Grams) over Time", "కాలక్రమేణా సగటు చేపల బరువు (గ్రాములు)")
                 )
-                fig_g.update_layout(height=260, margin=dict(l=15, r=15, t=35, b=15), legend=dict(orientation="h", y=1.2))
+                fig_g.update_layout(height=270, margin=dict(l=15, r=15, t=52, b=15), legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
                 st.plotly_chart(fig_g, use_container_width=True)
 
         with c_right:

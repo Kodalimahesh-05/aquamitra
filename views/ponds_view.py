@@ -63,12 +63,11 @@ def render_ponds_view():
     # 1. All Ponds Grid & Management
     with tabs[0]:
         st.markdown(f"#### {_lbl(lang, 'Registered Aquaculture Ponds', 'నమోదైన చేపల చెరువులు')}")
-        col_f1, col_f2, col_f3, col_add = st.columns([3, 2, 2, 2])
+        col_f1, col_f2, col_f3, col_add = st.columns([3, 2, 2, 2], vertical_alignment="bottom")
         with col_f1:
             p_search = st.text_input(
                 _lbl(lang, "Search Ponds", "చెరువులను వెతకండి"),
-                placeholder=_lbl(lang, "Search by name, ID or location...", "పేరు, ID లేదా ప్రాంతం ద్వారా వెతకండి..."),
-                label_visibility="collapsed"
+                placeholder=_lbl(lang, "Search by name, ID or location...", "పేరు, ID లేదా ప్రాంతం ద్వారా వెతకండి...")
             )
         with col_f2:
             status_filter = st.selectbox(
@@ -225,17 +224,15 @@ def render_ponds_view():
                 curr_idx = i
                 break
 
-        col_sel, col_edit, col_ai = st.columns([3, 1, 1])
+        col_sel, col_edit, col_ai = st.columns([3, 1, 1], vertical_alignment="bottom")
         with col_sel:
             selected_label = st.selectbox(_lbl(lang, "Select Pond Profile", "చెరువు ప్రొఫైల్‌ను ఎంచుకోండి"), options=pond_opts, index=curr_idx)
             selected_pid = pid_map[selected_label]
             st.session_state.active_profile_pond = selected_pid
         with col_edit:
-            st.markdown("<div style='margin-top: 28px;'></div>", unsafe_allow_html=True)
             if st.button(_lbl(lang, "Edit Pond", "సవరించండి"), use_container_width=True):
                 dialog_edit_pond(selected_pid)
         with col_ai:
-            st.markdown("<div style='margin-top: 28px;'></div>", unsafe_allow_html=True)
             if st.button(_lbl(lang, "Analyze Pond", "AI విశ్లేషణ"), type="primary", use_container_width=True):
                 st.session_state[f"show_ai_analysis_{selected_pid}"] = True
 
@@ -532,8 +529,9 @@ def render_ponds_view():
 
     # 5. Pond Maintenance Scheduler
     with tabs[4]:
-        st.markdown(f"#### {_lbl(lang, 'Equipment & Pond Maintenance Log', 'పరికరాలు మరియు చెరువు నిర్వహణ లాగ్')}")
-        m_top1, m_top2 = st.columns([3, 1])
+        m_top1, m_top2 = st.columns([3, 1], vertical_alignment="center")
+        with m_top1:
+            st.markdown(f"#### {_lbl(lang, 'Equipment & Pond Maintenance Log', 'పరికరాలు మరియు చెరువు నిర్వహణ లాగ్')}")
         with m_top2:
             if st.button(_lbl(lang, "Add Maintenance Log", "నిర్వహణ లాగ్ జోడించు"), type="primary", use_container_width=True):
                 dialog_add_maintenance()

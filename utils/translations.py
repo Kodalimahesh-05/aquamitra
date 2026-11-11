@@ -133,7 +133,7 @@ TRANSLATIONS = {
         "empty_alerts_msg": "No unresolved alerts or potential risks currently detected.",
 
         # Common Actions
-        "search_placeholder": "Search pond name, ID, species, alert or record...",
+        "search_placeholder": "Search pond, ID, species, alert...",
         "filter": "Filter",
         "select_pond": "Select Pond",
         "all_ponds": "All Ponds",
@@ -297,7 +297,7 @@ TRANSLATIONS = {
         "empty_alerts_msg": "ప్రస్తుతం శ్రద్ధ అవసరమైన హెచ్చరికలు లేవు.",
 
         # Common Actions
-        "search_placeholder": "చెరువు పేరు, ఐడీ, రకం లేదా రికార్డు వెతకండి...",
+        "search_placeholder": "చెరువు పేరు, ఐడీ లేదా అలర్ట్...",
         "filter": "వడపోత",
         "select_pond": "చెరువును ఎంచుకోండి",
         "all_ponds": "అన్ని చెరువులు",

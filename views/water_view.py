@@ -62,14 +62,14 @@ def render_water_view():
 
     # 1. Water Dashboard (Matrix View)
     with tabs[0]:
-        st.markdown(f"#### {_lbl(lang, 'Water Quality Parameter Matrix', 'నీటి నాణ్యత పారామితి పట్టిక')}")
-        st.caption(_lbl(
-            lang,
-            "Latest recorded water conditions across all fishery ponds against baseline reference ranges.",
-            "ప్రమాణ పరిధులతో పోల్చి అన్ని చెరువులలోని తాజా నీటి నాణ్యత స్థితి."
-        ))
-
-        btn_c1, btn_c2 = st.columns([3, 1])
+        btn_c1, btn_c2 = st.columns([3, 1], vertical_alignment="center")
+        with btn_c1:
+            st.markdown(f"#### {_lbl(lang, 'Water Quality Parameter Matrix', 'నీటి నాణ్యత పారామితి పట్టిక')}")
+            st.caption(_lbl(
+                lang,
+                "Latest recorded water conditions across all fishery ponds against baseline reference ranges.",
+                "ప్రమాణ పరిధులతో పోల్చి అన్ని చెరువులలోని తాజా నీటి నాణ్యత స్థితి."
+            ))
         with btn_c2:
             if st.button(_lbl(lang, "Analyze Water with AI", "AI తో నీటి విశ్లేషణ"), type="secondary", use_container_width=True):
                 st.session_state.show_water_ai = True
@@ -131,8 +131,9 @@ def render_water_view():
 
     # 2. Water Readings
     with tabs[1]:
-        st.markdown(f"#### {_lbl(lang, 'Manual Water Quality Observations', 'నీటి నాణ్యత రీడింగ్‌ల నమోదు')}")
-        rc1, rc2 = st.columns([3, 1])
+        rc1, rc2 = st.columns([3, 1], vertical_alignment="center")
+        with rc1:
+            st.markdown(f"#### {_lbl(lang, 'Manual Water Quality Observations', 'నీటి నాణ్యత రీడింగ్‌ల నమోదు')}")
         with rc2:
             if st.button(_lbl(lang, "Log Water Reading", "నీటి పరీక్ష నమోదు"), type="primary", use_container_width=True):
                 dialog_add_water_reading()

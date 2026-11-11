@@ -39,7 +39,7 @@ def render_alerts_view():
 
         if active:
             for a in active:
-                col_card, col_ai = st.columns([4, 1])
+                col_card, col_ai = st.columns([4, 1], vertical_alignment="center")
                 with col_card:
                     res = render_alert_card(a, show_action=True)
                     if res:
@@ -47,7 +47,6 @@ def render_alerts_view():
                         st.success(_lbl(lang, "Alert resolved.", "అలర్ట్ పరిష్కరించబడింది."))
                         st.rerun()
                 with col_ai:
-                    st.markdown("<div style='margin-top: 15px;'></div>", unsafe_allow_html=True)
                     if st.button(_lbl(lang, "Explain with AI", "AI తో వివరించండి"), key=f"ai_exp_al_{a['AlertID']}", use_container_width=True):
                         st.session_state[f"exp_al_{a['AlertID']}"] = True
 

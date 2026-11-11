@@ -39,8 +39,9 @@ def render_health_view():
 
     # 1. Incidents
     with tabs[0]:
-        st.markdown(f"#### {_lbl(lang, 'Health Observations & Incident Registry', 'ఆరోగ్య పరిశీలనలు మరియు సంఘటనల రిజిస్ట్రీ')}")
-        btn_c1, btn_c2 = st.columns([3, 1])
+        btn_c1, btn_c2 = st.columns([3, 1], vertical_alignment="center")
+        with btn_c1:
+            st.markdown(f"#### {_lbl(lang, 'Health Observations & Incident Registry', 'ఆరోగ్య పరిశీలనలు మరియు సంఘటనల రిజిస్ట్రీ')}")
         with btn_c2:
             if st.button(_lbl(lang, "Log New Incident", "కొత్త సంఘటన నమోదు"), type="primary", use_container_width=True):
                 dialog_add_incident()

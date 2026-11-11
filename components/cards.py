@@ -197,7 +197,7 @@ def render_alert_card(alert: Dict[str, Any], show_action: bool = True) -> bool:
         unsafe_allow_html=True
     )
     if show_action and not alert.get("IsResolved"):
-        btn_c1, btn_c2 = st.columns([3, 1])
+        btn_c1, btn_c2 = st.columns([4, 3], vertical_alignment="center")
         with btn_c2:
             if st.button(t("mark_resolved", lang), key=f"res_{alert.get('AlertID')}", use_container_width=True):
                 alert["IsResolved"] = True

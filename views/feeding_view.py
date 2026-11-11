@@ -36,8 +36,9 @@ def render_feeding_view():
 
     # 1. Feeding Dashboard
     with tabs[0]:
-        st.markdown(f"#### {_lbl(lang, 'Feed Management & Ration Dashboard', 'మేత నిర్వహణ మరియు రేషన్ డాష్‌బోర్డ్')}")
-        btn_c1, btn_c2 = st.columns([3, 1])
+        btn_c1, btn_c2 = st.columns([3, 1], vertical_alignment="center")
+        with btn_c1:
+            st.markdown(f"#### {_lbl(lang, 'Feed Management & Ration Dashboard', 'మేత నిర్వహణ మరియు రేషన్ డాష్‌బోర్డ్')}")
         with btn_c2:
             if st.button(_lbl(lang, "Analyze Feeding with AI", "AI తో మేత విశ్లేషణ"), type="secondary", use_container_width=True):
                 st.session_state.show_feed_ai = True

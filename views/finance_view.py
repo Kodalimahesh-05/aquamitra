@@ -58,8 +58,9 @@ def render_finance_view():
 
     # 1. Finance Dashboard
     with tabs[0]:
-        st.markdown(f"#### {_lbl(lang, 'Farm Financial Dashboard', 'ఫార్మ్ ఆర్థిక డాష్‌బోర్డ్')}")
-        btn_c1, btn_c2 = st.columns([3, 1])
+        btn_c1, btn_c2 = st.columns([3, 1], vertical_alignment="center")
+        with btn_c1:
+            st.markdown(f"#### {_lbl(lang, 'Farm Financial Dashboard', 'ఫార్మ్ ఆర్థిక డాష్‌బోర్డ్')}")
         with btn_c2:
             if st.button(_lbl(lang, "Analyze Finances with AI", "AI తో ఆర్థిక విశ్లేషణ"), type="secondary", use_container_width=True):
                 st.session_state.show_fin_ai = True
@@ -146,8 +147,9 @@ def render_finance_view():
 
     # 2. Expenses
     with tabs[1]:
-        st.markdown(f"#### {_lbl(lang, 'Operational Expenses Ledger', 'నిర్వహణ ఖర్చుల ఖాతా')}")
-        e_top1, e_top2 = st.columns([3, 1])
+        e_top1, e_top2 = st.columns([3, 1], vertical_alignment="center")
+        with e_top1:
+            st.markdown(f"#### {_lbl(lang, 'Operational Expenses Ledger', 'నిర్వహణ ఖర్చుల ఖాతా')}")
         with e_top2:
             if st.button(_lbl(lang, "Add Expense Record", "ఖర్చు రికార్డు జోడించు"), type="primary", use_container_width=True):
                 dialog_add_expense()
@@ -311,8 +313,9 @@ def render_finance_view():
 
     # 5. Sales
     with tabs[4]:
-        st.markdown(f"#### {_lbl(lang, 'Fish Sales & Harvest Offtake', 'చేపల అమ్మకాలు మరియు పంట విక్రయాలు')}")
-        s_top1, s_top2 = st.columns([3, 1])
+        s_top1, s_top2 = st.columns([3, 1], vertical_alignment="center")
+        with s_top1:
+            st.markdown(f"#### {_lbl(lang, 'Fish Sales & Harvest Offtake', 'చేపల అమ్మకాలు మరియు పంట విక్రయాలు')}")
         with s_top2:
             if st.button(_lbl(lang, "Record Commercial Sale", "వాణిజ్య అమ్మకం నమోదు"), type="primary", use_container_width=True):
                 dialog_add_sale()

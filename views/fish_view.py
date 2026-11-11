@@ -46,8 +46,9 @@ def render_fish_view():
 
     # 1. Fish Stock
     with tabs[0]:
-        st.markdown(f"#### {_lbl(lang, 'Active Fish Stocking Batches', 'క్రియాశీల చేప పిల్లల నిల్వ బ్యాచ్‌లు')}")
-        btn_c1, btn_c2 = st.columns([3, 1])
+        btn_c1, btn_c2 = st.columns([3, 1], vertical_alignment="center")
+        with btn_c1:
+            st.markdown(f"#### {_lbl(lang, 'Active Fish Stocking Batches', 'క్రియాశీల చేప పిల్లల నిల్వ బ్యాచ్‌లు')}")
         with btn_c2:
             if st.button(_lbl(lang, "Stock Fingerlings", "చేప పిల్లలను నిల్వ చేయండి"), type="primary", use_container_width=True):
                 dialog_add_fish_stock()
@@ -145,7 +146,7 @@ def render_fish_view():
     # 3. Growth Tracking
     with tabs[2]:
         st.markdown(f"#### {_lbl(lang, 'Fish Growth Sampling Observations', 'చేపల పెరుగుదల నమూనా పరిశీలనలు')}")
-        col_ctrl1, col_ctrl2, col_ctrl3 = st.columns([2, 2, 1])
+        col_ctrl1, col_ctrl2, col_ctrl3 = st.columns([2, 2, 1], vertical_alignment="bottom")
         with col_ctrl1:
             sel_pid = st.selectbox(
                 _lbl(lang, "Filter Pond", "చెరువును ఎంచుకోండి"),
@@ -154,11 +155,9 @@ def render_fish_view():
                 format_func=lambda x: tv(x, lang)
             )
         with col_ctrl2:
-            st.markdown("<div style='margin-top: 28px;'></div>", unsafe_allow_html=True)
             if st.button(_lbl(lang, "Analyze Growth with AI", "AI తో పెరుగుదల విశ్లేషణ"), type="secondary", use_container_width=True):
                 st.session_state.show_growth_ai = True
         with col_ctrl3:
-            st.markdown("<div style='margin-top: 28px;'></div>", unsafe_allow_html=True)
             if st.button(_lbl(lang, "Add Growth Sample", "పెరుగుదల నమూనా జోడించు"), type="primary", use_container_width=True):
                 dialog_add_growth_sample()
 
@@ -253,8 +252,9 @@ def render_fish_view():
 
     # 6. Harvest Management
     with tabs[5]:
-        st.markdown(f"#### {_lbl(lang, 'Commercial Fish Harvests', 'వాణిజ్య చేపల పంట కోతలు')}")
-        h_top1, h_top2 = st.columns([3, 1])
+        h_top1, h_top2 = st.columns([3, 1], vertical_alignment="center")
+        with h_top1:
+            st.markdown(f"#### {_lbl(lang, 'Commercial Fish Harvests', 'వాణిజ్య చేపల పంట కోతలు')}")
         with h_top2:
             if st.button(_lbl(lang, "Record New Harvest", "కొత్త కోత నమోదు"), type="primary", use_container_width=True):
                 dialog_record_harvest()
