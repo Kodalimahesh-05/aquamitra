@@ -8,6 +8,7 @@ Strictly zero emojis.
 from typing import Dict, Any, List, Optional
 import streamlit as st
 from components.theme import COLORS, get_status_badge_html
+from utils.translations import t, tv
 
 
 def render_metric_card(title: str, value: Any, subtitle: str = "", value_color: str = "#0F172A"):
@@ -30,14 +31,18 @@ def render_pond_snapshot(snapshot: Dict[str, Any]):
     """
     Renders a compact, visually rich Pond Health Snapshot card without emojis.
     """
+    lang = st.session_state.get("lang", "en")
     status = snapshot.get("status", "Active")
     status_level = "optimal" if status == "Active" else ("monitor" if status == "Preparing" else "neutral")
-    badge_html = get_status_badge_html(status, status_level)
+    badge_html = get_status_badge_html(tv(status, lang), status_level)
     
     # Strip any emojis from water_status string
     water_status = str(snapshot.get("water_status", "No Data")).replace("🟢", "").replace("🟡", "").replace("🔴", "").replace("⚪", "").strip()
     if not water_status:
         water_status = "No Data"
+    water_status_disp = tv(water_status, lang)
+    last_act = snapshot.get("last_activity", "N/A")
+    last_act_disp = tv(last_act, lang) if last_act in ("No Data", "No Recent Activity") else last_act
 
     st.markdown(
         f"""
@@ -45,7 +50,7 @@ def render_pond_snapshot(snapshot: Dict[str, Any]):
             <div class="pond-snapshot-header">
                 <div>
                     <h4 class="pond-snapshot-title">{snapshot['pond_id']}: {snapshot['pond_name']}</h4>
-                    <span style="font-size: 0.78rem; color: #64748B;">Species: <strong>{snapshot.get('species', 'N/A')}</strong></span>
+                    <span style="font-size: 0.78rem; color: #64748B;">{t('card_species', lang)} <strong>{snapshot.get('species', 'N/A')}</strong></span>
                 </div>
                 <div>
                     {badge_html}
@@ -53,28 +58,28 @@ def render_pond_snapshot(snapshot: Dict[str, Any]):
             </div>
             <div class="pond-snapshot-grid">
                 <div class="snapshot-item">
-                    <div class="snapshot-item-label">Fish Stock</div>
+                    <div class="snapshot-item-label">{t('card_fish_stock', lang)}</div>
                     <div class="snapshot-item-val">{snapshot.get('fish_count', '0')}</div>
                 </div>
                 <div class="snapshot-item">
-                    <div class="snapshot-item-label">Biomass</div>
+                    <div class="snapshot-item-label">{t('card_biomass', lang)}</div>
                     <div class="snapshot-item-val">{snapshot.get('biomass', '0 kg')}</div>
                 </div>
                 <div class="snapshot-item">
-                    <div class="snapshot-item-label">Water Status</div>
-                    <div class="snapshot-item-val">{water_status}</div>
+                    <div class="snapshot-item-label">{t('card_water_status', lang)}</div>
+                    <div class="snapshot-item-val">{water_status_disp}</div>
                 </div>
                 <div class="snapshot-item">
-                    <div class="snapshot-item-label">Feed Rate</div>
+                    <div class="snapshot-item-label">{t('card_feed_rate', lang)}</div>
                     <div class="snapshot-item-val">{snapshot.get('daily_feed', 'N/A')}</div>
                 </div>
                 <div class="snapshot-item">
-                    <div class="snapshot-item-label">Incidents</div>
+                    <div class="snapshot-item-label">{t('card_incidents', lang)}</div>
                     <div class="snapshot-item-val">{snapshot.get('incidents', '0')}</div>
                 </div>
                 <div class="snapshot-item">
-                    <div class="snapshot-item-label">Last Activity</div>
-                    <div class="snapshot-item-val" style="font-size: 0.80rem; font-weight: 600;">{snapshot.get('last_activity', 'N/A')}</div>
+                    <div class="snapshot-item-label">{t('card_last_activity', lang)}</div>
+                    <div class="snapshot-item-val" style="font-size: 0.80rem; font-weight: 600;">{last_act_disp}</div>
                 </div>
             </div>
         </div>
@@ -114,8 +119,14 @@ def render_activity_feed(activities: List[Dict[str, Any]]):
     """
     Renders a clean, unified chronological farm activity timeline without emojis.
     """
+    lang = st.session_state.get("lang", "en")
     if not activities:
-        render_empty_state("Activity", "No Recent Activity", "Pond management events will appear here as you log them.")
+        empty_desc = (
+            "చెరువు నిర్వహణ కార్యకలాపాలు మీరు నమోదు చేసిన తర్వాత ఇక్కడ కనిపిస్తాయి."
+            if lang == "te"
+            else "Pond management events will appear here as you log them."
+        )
+        render_empty_state("Activity", t("no_recent_activity", lang), empty_desc)
         return
 
     st.markdown('<div class="saas-card" style="padding: 12px 18px;">', unsafe_allow_html=True)
@@ -146,15 +157,22 @@ def render_alert_card(alert: Dict[str, Any], show_action: bool = True) -> bool:
     Renders a compact, responsible decision-support alert card without emojis.
     Returns True if 'Mark as Resolved' was clicked.
     """
+    lang = st.session_state.get("lang", "en")
     sev = alert.get("Severity", "WARNING").upper()
     sev_class = "sev-high" if sev == "HIGH" else ("sev-warning" if sev == "WARNING" else "sev-info")
     badge_level = "alert" if sev == "HIGH" else ("monitor" if sev == "WARNING" else "info")
-    badge_html = get_status_badge_html(sev, badge_level)
+    badge_html = get_status_badge_html(tv(sev.title(), lang), badge_level)
 
     title = alert.get('Title', 'Alert Notice')
     clean_title = "".join(ch for ch in title if ord(ch) < 0x2600 or ord(ch) > 0x27BF and ord(ch) < 0x1F000).strip()
     if not clean_title:
         clean_title = title
+
+    cat_disp = tv(alert.get('Category', 'Alert'), lang)
+    pond_disp = alert.get('PondID') or tv('General', lang)
+    if pond_disp == "General":
+        pond_disp = tv("General", lang)
+    next_action_default = "పరిస్థితులను నిశితంగా గమనించండి." if lang == "te" else "Monitor conditions closely."
 
     st.markdown(
         f"""
@@ -162,7 +180,7 @@ def render_alert_card(alert: Dict[str, Any], show_action: bool = True) -> bool:
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                 <div>
                     <span style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: #64748B;">
-                        {alert.get('Category', 'Alert')} &bull; {alert.get('PondID', 'General')}
+                        {cat_disp} &bull; {pond_disp}
                     </span>
                     <div style="font-size: 0.95rem; font-weight: 700; color: #0F172A; margin: 2px 0 4px 0;">{clean_title}</div>
                 </div>
@@ -172,7 +190,7 @@ def render_alert_card(alert: Dict[str, Any], show_action: bool = True) -> bool:
                 {alert.get('Reason', '')}
             </div>
             <div style="font-size: 0.76rem; color: #0D9488; margin-top: 6px; font-weight: 600;">
-                Next Step: {alert.get('SuggestedAction', 'Monitor conditions closely.')}
+                {t('next_step', lang)} {alert.get('SuggestedAction', next_action_default)}
             </div>
         </div>
         """,
@@ -181,7 +199,7 @@ def render_alert_card(alert: Dict[str, Any], show_action: bool = True) -> bool:
     if show_action and not alert.get("IsResolved"):
         btn_c1, btn_c2 = st.columns([3, 1])
         with btn_c2:
-            if st.button("Mark Resolved", key=f"res_{alert.get('AlertID')}", use_container_width=True):
+            if st.button(t("mark_resolved", lang), key=f"res_{alert.get('AlertID')}", use_container_width=True):
                 alert["IsResolved"] = True
                 return True
     return False

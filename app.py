@@ -57,17 +57,22 @@ st.set_page_config(
 # 2. State Initialization
 initialize_demo_session_state(st.session_state)
 if "lang" not in st.session_state:
-    st.session_state.lang = "en"
+    req_lang = str(st.query_params.get("lang", "")).lower() if hasattr(st, "query_params") else ""
+    st.session_state.lang = req_lang if req_lang in ("en", "te") else "en"
 if hasattr(st, "query_params") and "menu" in st.query_params:
     req_menu = str(st.query_params["menu"]).lower()
-    if req_menu in MENUS:
+    if req_menu in MENUS and req_menu != st.session_state.get("_last_qp_menu"):
         st.session_state.active_menu = req_menu
+        st.session_state._last_qp_menu = req_menu
 if "active_menu" not in st.session_state:
     st.session_state.active_menu = "overview"
+_curr_lang_init = st.session_state.get("lang", "en")
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = [
-        {"role": "assistant", "content": "Hello. I am **AquaMitra AI**, your digital aquaculture partner. You can ask me questions about your ponds, water conditions, feeding, or finances."}
+        {"role": "assistant", "content": t("ai_welcome_chat", _curr_lang_init)}
     ]
+elif len(st.session_state.chat_history) == 1 and st.session_state.chat_history[0].get("role") == "assistant":
+    st.session_state.chat_history[0]["content"] = t("ai_welcome_chat", _curr_lang_init)
 
 # 3. Apply Styles & Render Shared Sidebar
 apply_custom_styles()
@@ -75,25 +80,9 @@ active_menu, selected_pond, search_query = render_sidebar()
 lang = st.session_state.get("lang", "en")
 
 # 4. Standard Top Page Header
-menu_titles = {
-    "overview": ("Farm Command Center", "High-level operational overview, key metrics, and daily status summary."),
-    "ponds": ("Pond Management", "Manage pond inventories, physical dimensions, water sources, and status."),
-    "fish": ("Fish Stock & Biology", "Track stocked batches, cultured species, sampling growth, and biomass."),
-    "water": ("Water Quality Observations", "Parameter condition matrix, testing logs, trends, and reference ranges."),
-    "feeding": ("Feeding & Nutrition", "Daily feed applications, feeding rate calculations, and feed stock inventory."),
-    "health": ("Health & Mortality Incidents", "Log observations, mortality events, and operational follow-ups."),
-    "environment": ("Meteorological Context", "Local weather observations, multi-day forecast, and environmental context."),
-    "finance": ("Farm Finances & Revenue", "Operating expenditures, supply purchases, labour, sales, and net difference."),
-    "assets": ("Equipment & Machinery", "Inventory of mechanical equipment, pump/aerator maintenance, and documents."),
-    "analytics": ("Operational Analytics", "Cross-parameter interactive data analysis across biological and chemical metrics."),
-    "alerts": ("Decision-Support Alerts", "Rule-based operational notices, threshold alerts, and suggested actions."),
-    "records": ("Master Records & Audit", "Unified farm activity feed, central archive search, and data completeness audit."),
-    "ai": ("AquaMitra AI Companion", "Context-grounded assistant, categorized insights, suggestions, and daily briefing."),
-    "reports": ("Farm Reports & Exports", "Generate structured summaries and download raw data exports in CSV format."),
-    "settings": ("Configuration & Farm Profile", "Farm enterprise attributes, reference thresholds, language, and system settings.")
-}
+menu_titles = {m: (t(f"title_{m}", lang), t(f"desc_{m}", lang)) for m in MENUS}
 
-curr_title, curr_desc = menu_titles.get(active_menu, ("AquaMitra", APP_TAGLINE))
+curr_title, curr_desc = menu_titles.get(active_menu, (t("app_name", lang), t("tagline", lang)))
 
 st.markdown(
     f"""
@@ -108,61 +97,61 @@ st.markdown(
 # 5. Global Search Handler
 if search_query and search_query.strip():
     q = search_query.strip().lower()
-    st.markdown(f"##### Search Results for *\"{search_query}\"*")
+    st.markdown(f"##### {t('search_results_for', lang)} *\"{search_query}\"*")
 
     matched_ponds = [p for p in st.session_state.demo_ponds if q in p.get("PondName", "").lower() or q in p.get("PondID", "").lower() or q in p.get("Location", "").lower()]
     matched_alerts = [a for a in st.session_state.demo_alerts if q in a.get("Title", "").lower() or q in a.get("Reason", "").lower() or q in a.get("Category", "").lower()]
 
     col_p, col_a = st.columns(2)
     with col_p:
-        st.caption(f"Ponds Matched ({len(matched_ponds)})")
+        st.caption(f"{t('ponds_matched', lang)} ({len(matched_ponds)})")
         if matched_ponds:
             for p in matched_ponds:
                 snap = get_pond_health_snapshot(p["PondID"])
                 render_pond_snapshot(snap)
         else:
-            render_empty_state("Ponds", "No Matching Ponds", f"No ponds match '{search_query}'.")
+            render_empty_state(t("ponds_label", lang), t("no_matching_ponds_title", lang), f"{t('no_matching_ponds_msg', lang)} '{search_query}'.")
 
     with col_a:
-        st.caption(f"Alerts Matched ({len(matched_alerts)})")
+        st.caption(f"{t('alerts_matched', lang)} ({len(matched_alerts)})")
         if matched_alerts:
             for a in matched_alerts:
                 render_alert_card(a)
         else:
-            render_empty_state("Alerts", "No Matching Alerts", f"No alerts match '{search_query}'.")
+            render_empty_state(t("alerts_label", lang), t("no_matching_alerts_title", lang), f"{t('no_matching_alerts_msg', lang)} '{search_query}'.")
 
     st.markdown("<div style='border-top: 1px solid #E2E8F0; margin: 16px 0;'></div>", unsafe_allow_html=True)
 
 # 6. Global Quick Actions Bar (All 9 Workflows, Zero Emojis)
-st.caption("QUICK ACTIONS")
+st.caption(t("quick_actions", lang))
 st.markdown('<div class="quick-actions-container">', unsafe_allow_html=True)
 qa1, qa2, qa3, qa4, qa5, qa6, qa7, qa8, qa9 = st.columns(9)
 with qa1:
-    if st.button("Add Pond", use_container_width=True, key="top_qa_add_pond"):
+    if st.button(t("qa_add_pond", lang), use_container_width=True, key="top_qa_add_pond"):
         dialog_add_pond()
 with qa2:
-    if st.button("Log Water", use_container_width=True, key="top_qa_rec_water"):
+    if st.button(t("qa_log_water", lang), use_container_width=True, key="top_qa_rec_water"):
         dialog_add_water_reading()
 with qa3:
-    if st.button("Add Growth", use_container_width=True, key="top_qa_add_growth"):
+    if st.button(t("qa_add_growth", lang), use_container_width=True, key="top_qa_add_growth"):
         dialog_add_growth_sample()
 with qa4:
-    if st.button("Log Feed", use_container_width=True, key="top_qa_rec_feed"):
+    if st.button(t("qa_log_feed", lang), use_container_width=True, key="top_qa_rec_feed"):
         dialog_add_feeding()
 with qa5:
-    if st.button("Log Incident", use_container_width=True, key="top_qa_rec_incident"):
+    if st.button(t("qa_log_incident", lang), use_container_width=True, key="top_qa_rec_incident"):
         dialog_add_incident()
 with qa6:
-    if st.button("Add Expense", use_container_width=True, key="top_qa_add_expense"):
+    if st.button(t("qa_add_expense", lang), use_container_width=True, key="top_qa_add_expense"):
         dialog_add_expense()
 with qa7:
-    if st.button("Record Sale", use_container_width=True, key="top_qa_rec_sale"):
+    if st.button(t("qa_record_sale", lang), use_container_width=True, key="top_qa_rec_sale"):
         dialog_add_sale()
 with qa8:
-    if st.button("Record Harvest", use_container_width=True, key="top_qa_rec_harvest"):
+    if st.button(t("qa_record_harvest", lang), use_container_width=True, key="top_qa_rec_harvest"):
         dialog_record_harvest()
 with qa9:
-    if st.button("Add Maintenance", use_container_width=True, key="top_qa_add_maint"):
+    if st.button(t("qa_add_maintenance", lang), use_container_width=True, key="top_qa_add_maint"):
         dialog_add_maintenance()
 st.markdown('</div>', unsafe_allow_html=True)
 
